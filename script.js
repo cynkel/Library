@@ -4,7 +4,7 @@ const booksContainer = document.querySelector(".booksContainer");
 const noPages = document.querySelector(".nop");
 const modal = document.querySelector(".modal-form");
 const closeButton = document.querySelector(".close");
-
+const newBookForm = document.querySelector("#bookForm");
 
 function createNewBook(title, author, pages) {
     const bookCard = document.createElement("div");
@@ -45,9 +45,6 @@ function createNewBook(title, author, pages) {
     booksContainer.appendChild(bookCard);
 }
 
-newBookButton.addEventListener("click", () => modal.style.display = "block");
-closeButton.addEventListener("click", () => modal.style.display = "none");
-
 function Book(title, author, pages, read) {
     this.title = title,
     this.author = author,
@@ -58,8 +55,8 @@ function Book(title, author, pages, read) {
     };
 }
 
-function addBookToCollection() {
-    const book = new Book("The Hobbit", "J.R.R. Tolkien", "295", "not read yet");
+function addBookToCollection(title, author, pages, readStatus) {
+    const book = new Book(title, author, pages, readStatus);
     collection.push(book);
 }
 
@@ -69,13 +66,23 @@ function showBooks() {
     }
 }
 
-addBookToCollection();
-addBookToCollection();
-addBookToCollection();
-addBookToCollection();
-addBookToCollection();
-addBookToCollection();
-addBookToCollection();
-addBookToCollection();
-addBookToCollection();
-showBooks();
+function updateBookLibrary() {
+    let booksContainerChild = booksContainer.lastElementChild;
+    while (booksContainerChild) {
+        booksContainer.removeChild(booksContainerChild);
+        booksContainerChild = booksContainer.lastElementChild;
+    }
+    showBooks();
+} 
+
+newBookButton.addEventListener("click", () => modal.style.display = "block");
+closeButton.addEventListener("click", () => modal.style.display = "none");
+
+newBookForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let bookTitle = document.querySelector("#title");
+    let bookAuthor = document.querySelector("#bookAuthor");
+    let numberOfPages = document.querySelector("#numberOfPagesBox");
+    addBookToCollection(bookTitle.value, bookAuthor.value, numberOfPages.value);
+    updateBookLibrary();
+});
